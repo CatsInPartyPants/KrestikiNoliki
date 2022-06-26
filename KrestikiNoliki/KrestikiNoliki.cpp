@@ -28,6 +28,7 @@ bool win()
 
 	if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '_') return false;
 	if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != '_') return false;
+
 	return true;
 }
 
@@ -39,6 +40,14 @@ void stepPlayer(int i)
 		cin >> c1;
 		cout << "Выберете значение по вертикали: ";
 		cin >> c2;
+		if (c1 > 3 && c2 > 3) {
+			cout << "Неверное значение\n";
+			continue;
+		}
+		if (c1 < 0 && c2 < 0) {
+			cout << "Неверное значение\n";
+			continue;
+		}
 		if (board[c1-1][c2-1] == 'X' || board[c1-1][c2-1] == 'O')
 		{
 			cout << "Клетка занята. Выберете другую клетку\n";
@@ -52,6 +61,7 @@ void stepPlayer(int i)
 int main()
 {
 	setlocale(LC_ALL, "");
+	int count = 0;
 	// заполняем массив значениями
 	for(int i = 0; i< 3; i++)
 	{
@@ -62,12 +72,23 @@ int main()
 	}
 	menu();
 	show();
-	while(win())
+	while(win() && count != 9)
 	{
 		cout << "Ход игрока " << firstPlayer << endl;
 		stepPlayer(nF);
-		if (!win()) break;
+		if (!win()) {
+			cout << "Игрок " << firstPlayer << " победил!\n";
+			break;
+		}
+		count++;
+		if (count == 9) cout << "Ничья!\n";
 		cout << "Ход игрока " << secondPlayer << endl;
 		stepPlayer(nS);
+		if (!win()) {
+			cout << "Игрок " << firstPlayer << " победил!\n";
+			break;
+		}
+		count++;
+		if (count == 9) cout << "Ничья!\n";
 	}
 }
